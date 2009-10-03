@@ -1,34 +1,5 @@
 <?php
-
-class cesTestSelenium extends sfTestFunctional
-{
-  protected $shutdownBrowser = true;
-
-  public function __construct(cesSeleniumBrowser $browser, lime_test $lime = null, $testers = array())
-  {
-    $this->browser = $browser;
-
-    if (is_null(self::$test))
-    {
-      self::$test = !is_null($lime) ? $lime : new lime_test(null, new lime_output_color());
-    }
-
-    register_shutdown_function(array($this, 'shutdown'));
-  }
-  
-  /**
-   * event fires when the test is complete. put any cleanup work here
-   */
-  public function shutdown()
-  {
-    if ($this->shutdownBrowser)
-    {
-    }
-  }
-}
-
-
-class cesSeleniumBrowser
+class cesTestBrowser
 {
   protected $sfTestFunctional;
   protected $external_browser;
@@ -58,7 +29,7 @@ class cesSeleniumBrowser
   public function __destruct()
   {
     if ($this->engine != "mock") {
-      $this->internal_browser->stop();
+      $this->external_browser->stop();
     }
   }
 }
