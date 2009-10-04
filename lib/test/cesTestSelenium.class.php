@@ -15,10 +15,10 @@ class cesTestSelenium extends sfTestFunctional
 
     register_shutdown_function(array($this, 'shutdown'));
   }
-  
-  /**
-   * event fires when the test is complete. put any cleanup work here
-   */
+  public function getSeleniumBrowser()
+  {
+    return $this->browser->external_browser;
+  }
   public function shutdown()
   {
     if ($this->shutdownBrowser)

@@ -2,14 +2,15 @@
 class cesTestBrowser
 {
   protected $sfTestFunctional;
-  protected $external_browser;
+  public $external_browser;
   protected $engine;
   public function getSfTestFunctional()
   {
     return $this->sfTestFunctional;
   }
-  public function __construct($browser="mock", $url="http://localhost/", $host="127.0.0.1", $port="4444")
+  public function __construct($stay_open=false, $browser="firefox", $url="http://localhost/", $host="127.0.0.1", $port="4444")
   {
+    $this->stayOpen = $stay_open;
     $this->engine = $browser;
     $this->sfTestFunctional  = new sfTestFunctional(new sfBrowser());
     if ($browser == "firefox") {
@@ -28,7 +29,7 @@ class cesTestBrowser
   }
   public function __destruct()
   {
-    if ($this->engine != "mock") {
+    if ($this->engine != "mock" && !$this->stayOpen) {
       $this->external_browser->stop();
     }
   }
