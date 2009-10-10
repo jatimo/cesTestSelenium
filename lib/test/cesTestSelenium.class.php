@@ -14,6 +14,8 @@ class cesTestSelenium extends sfTestFunctional
     }
 
     register_shutdown_function(array($this, 'shutdown'));
+    $this->buildTestChain();
+    $this->executeTestChain();
   }
   public function getSeleniumBrowser()
   {
@@ -25,4 +27,24 @@ class cesTestSelenium extends sfTestFunctional
     {
     }
   }
+  public function buildTestChain()
+  {
+    $this->testChain = array();
+    foreach (get_class_methods(get_class($this)) as $testMethodName)
+    {
+      if (preg_match('/^(.*)Test$/', $testMethodName))
+      {
+        $this->testChain[] = $testMethodName;
+      }
+    }
+    return $this->testChain;
+  }
+  public function executeTestChain()
+  {
+    foreach ($this->testChain as $testMethod)
+    {
+      $this->$testMethod();
+    }
+  }
+  
 }
