@@ -4,6 +4,7 @@ class cesTestBrowser
   protected $sfTestFunctional;
   public $external_browser;
   protected $engine;
+  public $testChain = array();
   public function getSfTestFunctional()
   {
     return $this->sfTestFunctional;
@@ -20,6 +21,27 @@ class cesTestBrowser
     elseif($browser == "mock-se") {
       $this->external_browser = new Testing_Selenium("*mock", $url, $host . ":" . $port);
       $this->external_browser->start();
+    }
+    $this->buildTestChain();
+    $this->executeTestChain();
+  }
+  public function buildTestChain()
+  {
+    $this->testChain = array();
+    foreach (get_class_methods(get_class($this)) as $testMethodName)
+    {
+      if (preg_match('/^(.*)Test$/', $testMethodName))
+      {
+        $this->testChain[] = $testMethodName;
+      }
+    }
+    return $this->testChain;
+  }
+  public function executeTestChain()
+  {
+    foreach ($this->testChain as $testMethod)
+    {
+      $this->$testMethod();
     }
   }
   
