@@ -14,8 +14,14 @@ class cesTestSelenium extends sfTestFunctional
     }
 
     register_shutdown_function(array($this, 'shutdown'));
+    $this->configure();
     $this->buildTestChain();
     $this->executeTestChain();
+  }
+  public function configure()
+  {
+    
+    
   }
   public function getSeleniumBrowser()
   {
@@ -25,6 +31,7 @@ class cesTestSelenium extends sfTestFunctional
   {
     if ($this->shutdownBrowser)
     {
+      $this->getSeleniumBrowser()->stop();
     }
   }
   public function buildTestChain()
