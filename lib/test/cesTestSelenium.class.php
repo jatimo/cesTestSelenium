@@ -66,16 +66,5 @@ class cesTestSelenium extends sfTestFunctional
       $this->$testMethod();
     }
   }
-  /***
-   * types input one character at a time like a human.
-   *
-   */
-  public function humanType($locator, $value)
-  {
-    for ($i = 0; $i <= strlen($value) ; $i++ )
-    {
-      $this->getSeleniumBrowser()->type($locator, $value[$i]);
-      $this->getSeleniumBrowser()->waitForPageToLoad('100');      
-    }
-  }
+  
 }
