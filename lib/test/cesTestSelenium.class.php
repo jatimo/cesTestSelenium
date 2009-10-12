@@ -6,6 +6,7 @@ class cesTestSelenium extends sfTestFunctional
 
   public function __construct(cesTestBrowser $browser, lime_test $lime = null, $testers = array())
   {
+    $this->test()->info('Test System Bootstrapped... Configuring..');
     $this->browser = $browser;
 
     if (is_null(self::$test))
@@ -15,13 +16,24 @@ class cesTestSelenium extends sfTestFunctional
 
     register_shutdown_function(array($this, 'shutdown'));
     $this->configure();
+    $this->test()->info('Building Test Chain...');
     $this->buildTestChain();
+    $this->test()->info('Executing Test Chain...');
     $this->executeTestChain();
   }
-  public function configure()
+  public function configure() {}
+  
+  public function loadCases($fileSpec)
   {
-    
-    
+    $absoluteFileSpec = sfConfig::get('sf_root_dir') . "/test/cases/" . $fileSpec . ".yml";
+    if (file_exists($absoluteFileSpec))
+    {
+      return sfYaml::load($absoluteFileSpec);
+    }
+    else
+    {
+      throw new sfException("File not found: {$absoluteFileSpec}");
+    }
   }
   public function getSeleniumBrowser()
   {
@@ -50,8 +62,20 @@ class cesTestSelenium extends sfTestFunctional
   {
     foreach ($this->testChain as $testMethod)
     {
+      $this->test()->info("{$testMethod}:");
       $this->$testMethod();
     }
   }
-  
+  /***
+   * types input one character at a time like a human.
+   *
+   */
+  public function humanType($locator, $value)
+  {
+    for ($i = 0; $i <= strlen($value) ; $i++ )
+    {
+      $this->getSeleniumBrowser()->type($locator, $value[$i]);
+      $this->getSeleniumBrowser()->waitForPageToLoad('100');      
+    }
+  }
 }

@@ -1,19 +1,20 @@
 <?php
 class cesTestBrowser
 {
-  protected $sfTestFunctional;
+  protected $testFunctional;
   public $external_browser;
   protected $engine;
   public $testChain = array();
-  public function getSfTestFunctional()
+  public function getTestFunctional()
   {
-    return $this->sfTestFunctional;
+    return $this->testFunctional;
   }
   public function __construct($stay_open=false, $browser="firefox", $url="http://localhost/", $host="127.0.0.1", $port="4444")
   {
     $this->stayOpen = $stay_open;
     $this->engine = $browser;
-    $this->sfTestFunctional  = new sfTestFunctional(new sfBrowser());
+    $this->testFunctional  = new cesTestFunctional(new sfBrowser());
+    //$this->testFunctional->loadData();
     if ($browser == "firefox") {
       $this->external_browser = new Testing_Selenium("*firefox", $url, $host . ":" . $port);
       $this->external_browser->start();
@@ -23,7 +24,7 @@ class cesTestBrowser
       $this->external_browser->start();
     }
   }
- 
+  
   public function getEngine()
   {
     return $this->engine;
@@ -34,4 +35,5 @@ class cesTestBrowser
       $this->external_browser->stop();
     }
   }
+
 }

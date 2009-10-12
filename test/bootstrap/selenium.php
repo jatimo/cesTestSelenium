@@ -36,4 +36,5 @@ sfContext::createInstance($configuration);
 // remove all cache
 sfToolkit::clearDirectory(sfConfig::get('sf_app_cache_dir'));
 
+Doctrine::loadData(sfConfig::get('sf_test_dir').'/fixtures'); 
 
