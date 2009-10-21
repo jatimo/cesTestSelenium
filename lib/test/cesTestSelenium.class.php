@@ -6,9 +6,11 @@ class cesTestSelenium extends sfTestFunctional
 
   public function __construct(cesTestBrowser $browser, lime_test $lime = null, $testers = array())
   {
-    $this->test()->info('Test System Bootstrapped... Configuring..');
+    $this->test()->info('Test System Bootstrapped...');
     $this->browser = $browser;
-
+    $testName = preg_replace('/(.*)Test/', '$1', get_class($this));
+    $this->test()->info("Configuring Test: {$testName}");
+    
     if (is_null(self::$test))
     {
       self::$test = !is_null($lime) ? $lime : new lime_test(null, new lime_output_color());
@@ -62,7 +64,8 @@ class cesTestSelenium extends sfTestFunctional
   {
     foreach ($this->testChain as $testMethod)
     {
-      $this->test()->info("{$testMethod}:");
+      $testName = preg_replace('/(.*)Test/', '$1', $testMethod);
+      $this->test()->info("Executing Sub-Test: {$testName}:");
       $this->$testMethod();
     }
   }
